@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/insurance_chatbot
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+    networks:
+      - chatbot-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - chatbot-network
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=insurance_chatbot
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - chatbot-network
+
+  vector-db:
+    build: ./vector_db
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./vector_db/data:/app/data
+    networks:
+      - chatbot-network
+
+volumes:
+  postgres_data:
+
+networks:
+  chatbot-network:
+    driver: bridge 
