@@ -14,17 +14,17 @@ services:
     networks:
       - chatbot-network
 
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    depends_on:
-      - backend
-    networks:
-      - chatbot-network
+  #frontend:
+  #  build: ./frontend
+  #  ports:
+  #    - "3000:3000"
+  #  volumes:
+  #    - ./frontend:/app
+  #    - /app/node_modules
+  #  depends_on:
+  #    - backend
+  #  networks:
+  #    - chatbot-network
 
   db:
     image: postgres:15
@@ -48,9 +48,36 @@ services:
     networks:
       - chatbot-network
 
+  gradio:
+    build: 
+      context: ./frontend/Gradio
+      dockerfile: Dockerfile
+    ports:
+      - "7860:7860"
+    networks:
+      - chatbot-network
+
+  streamlit-demo:
+    build:
+      context: ./frontend/StreamLit
+      dockerfile: Dockerfile  # o ajustá si lo tenés en otra carpeta
+    ports:
+      - "8501:8501"
+    networks:
+      - chatbot-network
+  grok-demo:
+    build:
+      context: ./frontend/StreamLit-Grok
+      dockerfile: Dockerfile  # o ajustá si lo tenés en otra carpeta
+    ports:
+      - "3000:3000"
+    networks:
+      - chatbot-network
+
 volumes:
   postgres_data:
 
 networks:
   chatbot-network:
     driver: bridge 
+

@@ -1,0 +1,62 @@
+      
+# docker-compose.yml
+
+# Versión del formato de Docker Compose. Es buena práctica definirla.
+
+# Aquí definimos todos los servicios (contenedores) que compondrán nuestra aplicación.
+services:
+
+  # 1. Nuestro servicio de Backend (la API de FastAPI)
+  backend:
+    # 'build: .' le dice a Compose que construya una imagen a partir del Dockerfile
+    # que se encuentra en el directorio actual (.).
+    build: .
+    container_name: insurance_chatbot_api # Un nombre amigable para el contenedor
+    env_file:
+      - .env # Carga las variables de entorno desde el archivo .env
+    ports:
+      # Mapea el puerto 8000 de TU MÁQUINA (host) al puerto 8000 del CONTENEDOR.
+      # Así puedes acceder a la API desde tu navegador en http://localhost:8000
+      - "8000:8000"
+    volumes:
+      # Monta el código local en el contenedor. ¡Esto es MAGIA para el desarrollo!
+      # Cualquier cambio que hagas en tu código en la carpeta './app' se reflejará
+      # instantáneamente dentro del contenedor, sin necesidad de reconstruir la imagen.
+      # Uvicorn con --reload detectará estos cambios y reiniciará el servidor.
+      - ./app:/code/app
+    # Sobrescribimos el comando por defecto del Dockerfile para activar el modo de recarga.
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      # Le dice a Docker que este servicio no debe iniciar hasta que 'chromadb' esté listo.
+      - chromadb
+
+# 2. Nuestro servicio de Base de Datos Vectorial (ChromaDB)
+  chromadb:
+    # Usamos la imagen oficial desde el registro de GitHub
+    image: ghcr.io/chroma-core/chroma
+    container_name: insurance_chromadb
+    ports:
+      # Mapeamos el puerto 8001 de TU MÁQUINA al puerto 8000 del contenedor
+      - "8001:8000"
+    volumes:
+      # Persistimos los datos para no tener que re-indexar cada vez
+      - ./data_store/chroma_db:/chroma/
+    # El healthcheck sigue siendo útil para asegurar que el servicio está listo
+    healthcheck:
+      # CORRECCIÓN: Apuntamos a un endpoint que sí existe en las versiones nuevas.
+      # Este comando simplemente pide la versión de la API, lo cual es una
+      # excelente prueba de que el servicio está vivo y respondiendo.
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/version"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+# Aquí definimos los volúmenes nombrados que usamos arriba.
+volumes:
+  chroma_data:
+    # El driver 'local' significa que los datos se almacenarán en una parte
+    # del sistema de archivos del host gestionada por Docker.
+    driver: local
+
+    
