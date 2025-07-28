@@ -1,0 +1,6 @@
+boto3
+python-dotenv
+fastapi
+uvicorn[standard]
+jinja2
+google-generativeai

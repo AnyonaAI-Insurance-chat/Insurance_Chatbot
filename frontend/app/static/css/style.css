@@ -1,0 +1,203 @@
+
+:root {
+    --bordo-oscuro: #5D1B28;
+    --bordo-claro: #8C2D3A;
+    --fondo: #121212;
+    --texto-principal: #000000;
+    --texto-secundario: #B3B3B3;
+    --superficie: #1E1E1E;
+    --borde: #2c2c2c;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(61, 124, 197) ;
+    color: var(--texto-principal);
+    margin: 2rem;
+}
+
+.chat-fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(to left, #5633B0, #3BCFAD);
+  box-shadow: 2px -5px 5px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
+}
+
+.chat-fab-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(to right, #5633B0, #3BCFAD); /* Fondo interno */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-fab:hover {
+  transform: scale(1.1);
+  background: #EAEAEA;
+}
+
+#svg-initial {
+    opacity: 1; /* Visible por defecto */
+    width: 50px;
+    height: 50px;
+    color: white; /* Si tus SVGs usan currentColor, serán blancos */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1; /* Visible por defecto */
+    pointer-events: auto; /* Permite interacciones */
+    transition: opacity 0.3s ease-in-out; /* Transición para la opacidad */
+}
+#svg-alt {
+    opacity: 0; /* Oculto por defecto */
+    width: 20px;
+    height: 20px;
+    color: white; /* Si tus SVGs usan currentColor, serán blancos */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0; /* Oculto por defecto */
+    pointer-events: none; /* Deshabilita interacciones */
+    transition: opacity 0.3s ease-in-out; /* Transición para la opacidad */
+}
+
+.chat-window {
+    position: fixed;
+    bottom: 70px;
+    right: 70px;
+    width: 370px;
+    max-width: 90vw;
+    height: 500px;
+    background-color: white; /* Cambiado a blanco */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: opacity 0.3s, transform 0.3s;
+    transform-origin: bottom right;
+    /* ... */
+    border: 7px solid transparent;
+    border-image: linear-gradient(315deg, #5633B0, #3BCFAD) 1;
+}
+.chat-window.hidden {
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none;
+}
+
+.chat-header {
+    background-color: var(--bordo-oscuro);
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.chat-header h3 { margin: 0; font-size: 1rem; }
+.close-chat-btn {
+    background: none; border: none; color: white;
+    font-size: 1.5rem; cursor: pointer;
+}
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 80%;
+    line-height: 1.4;
+}
+.bot-message {
+    background-color: #C2B4E5;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+.user-message {
+    background-color: #C2F2EE;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-input-area {
+    padding: 10px;
+    border-top: 1px solid var(--borde);
+}
+#chat-form input {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #C2F2EE;
+    color: black;
+    font-size: 1rem;
+    outline: none;
+}
+#chat-form button {
+    background: none; border: none; cursor: pointer;
+    padding: 0 10px;
+}
+#chat-form button svg {
+    width: 24px; height: 24px; color: #5633B0;
+}
+/* Estilos para el indicador de "escribiendo..." */
+.htmx-indicator {
+    opacity: 0;
+    transition: opacity 200ms ease-in;
+}
+.htmx-request .htmx-indicator {
+    opacity: 1;
+}
+.htmx-request.htmx-indicator {
+    opacity: 1;
+}
+
+/* Animación de los puntos */
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #777;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 2px;
+    animation: typing-blink 1.4s infinite both;
+}
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing-blink {
+    0% { opacity: 0.2; }
+    20% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+/* Ocultar el indicador por defecto */
+#typing-indicator {
+    display: none;
+}
+
+/* Mostrar el indicador cuando HTMX está haciendo una petición */
+.htmx-request #typing-indicator {
+    display: block;
+}
