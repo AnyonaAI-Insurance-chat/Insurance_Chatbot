@@ -1,0 +1,31 @@
+# requirements_chromadb.txt - Usando ChromaDB en lugar de FAISS
+
+# Core dependencies
+langchain-community
+langchain-core
+python-dotenv
+
+# ChromaDB - Vector database moderna
+chromadb
+
+# Embeddings y ML (opcionales con ChromaDB pero recomendados)
+sentence-transformers
+transformers
+
+# PDF processing
+pypdf
+PyPDF2
+
+# Web search
+duckduckgo-search
+
+# Ollama integration
+requests
+
+# Optional: Para mejor rendimiento
+accelerate
+safetensors
+
+# Optional: Para embeddings personalizados con ChromaDB
+openai  # Solo si quieres usar embeddings de OpenAI (no necesario)
+cohere  # Solo si quieres usar embeddings de Cohere (no necesario)
