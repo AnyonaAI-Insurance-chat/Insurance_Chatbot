@@ -1,0 +1,35 @@
+# Entornos virtuales
+venv/
+.env
+*.env
+
+# Archivos Python compilados
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Archivos temporales de sistema
+*.log
+*.swp
+.DS_Store
+Thumbs.db
+
+# Bases de datos temporales o de desarrollo
+*.sqlite3
+*.db
+
+# Carpeta data si es generada o pesada
+data/
+data_store/
+
+# Archivos de configuración locales
+.env.local
+.env.*
+
+# Docker
+*.pid
+*.sock
+
+# Otros
+*.bak
+*.tmp
