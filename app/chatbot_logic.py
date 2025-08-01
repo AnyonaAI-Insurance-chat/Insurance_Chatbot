@@ -111,12 +111,17 @@ tools = [tool_chromadb, tool_web]
 # 3. Configurar el LLM
 # Usamos una variable de entorno para la URL de Ollama, con un valor por defecto
 # para que Docker pueda comunicarse con el Ollama que corre en el host (tu PC).
-ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
-llm = Ollama(
-    model="llama3.2:latest",
+google_api_key = os.getenv("GOOGLE_API_KEY") 
+if not google_api_key:
+    raise ValueError("La variable de entorno GOOGLE_API_KEY no está configurada.")
+
+llm = ChatGoogleGenerativeAI(
+    model="gemini-1.5-flash-latest", # O el modelo de Gemini que prefieras
+    google_api_key=google_api_key,
     temperature=0.1,
-    base_url=ollama_base_url
+    convert_system_message_to_human=True # Útil para compatibilidad con algunos agentes
 )
+
 
 print("✅ Lógica del agente y herramientas inicializadas.")
 
