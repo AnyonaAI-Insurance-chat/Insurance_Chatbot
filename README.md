@@ -68,7 +68,7 @@ graph TD
         %% --- Backend ---
         subgraph "Backend (API)"
             API[🚀 FastAPI <br> app/main.py]:::web
-            LOGIC[🧠 Agent Logic <br> app/chatbot_logic.py]:::logic
+            LOGIC[🧠 Agent Logic <br> LangChain app/chatbot_logic.py]:::logic
             TOOL_RAG[🛠️ RAG Tool]:::tool
             TOOL_WEB[🌐 Web Tool]:::tool
         end
