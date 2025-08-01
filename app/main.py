@@ -4,14 +4,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 import html
-
-# ¡LA IMPORTACIÓN CORRECTA!
-# Solo importamos la función que realmente existe en chatbot_logic.py
 from .chatbot_logic import get_agent_response
 
 app = FastAPI(title="Insurance Chatbot API")
 
-# Servir el frontend (esto se queda igual)
+# Servir el frontend 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
