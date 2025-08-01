@@ -12,6 +12,7 @@ langchain
 langchain-community
 langchain-core
 langchain-ollama
+langchain-google-genai
 
 # --- Base de Datos Vectorial ---
 chromadb-client
