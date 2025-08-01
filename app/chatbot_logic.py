@@ -1,6 +1,3 @@
-# app/chatbot_logic.py
-# Fiel adaptación del trabajo del equipo de IA para funcionar con FastAPI
-
 import os
 import asyncio
 from typing import AsyncGenerator
