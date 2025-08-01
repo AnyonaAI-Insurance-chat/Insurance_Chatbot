@@ -124,43 +124,23 @@ print("✅ Lógica del agente y herramientas inicializadas.")
 # === FIN: LÓGICA ORIGINAL --- INICIO: CAPA DE CONEXIÓN WEB (Streaming) ===
 # =========================================================================
 
-class AsyncStreamCallbackHandler(AsyncCallbackHandler):
-    """Callback handler para el streaming de tokens a una cola asyncio."""
-    def __init__(self, queue: asyncio.Queue):
-        self.queue = queue
-    async def on_llm_new_token(self, token: str, **kwargs) -> None:
-        await self.queue.put(token)
-    async def on_llm_end(self, response, **kwargs) -> None:
-        await self.queue.put(None)
-    async def on_llm_error(self, error, **kwargs) -> None:
-        await self.queue.put(None)
 
 async def get_agent_response(question: str, session_id: str) -> AsyncGenerator[str, None]:
     """
     Función "puente" que usa las funciones del equipo de IA para responder
-    a una petición web de forma asíncrona y con streaming.
+    a una petición web de forma asíncrona y con streaming, usando el método nativo
+    de LangChain `.astream()`.
     """
-    queue = asyncio.Queue()
-    
-    # Creamos una instancia del agente para esta petición específica,
-    # pasándole nuestro callback handler para el streaming.
-    agent_executor = crear_agente(tools, llm, callbacks=[AsyncStreamCallbackHandler(queue)])
+    # Creamos una instancia fresca del agente para cada petición.
+    # Ya no necesitamos pasarle el callback.
+    agent_executor = crear_agente(tools, llm)
 
-    # Ejecutamos el agente en una tarea de fondo para no bloquear la respuesta
-    async def run_agent_in_background():
-        try:
-            # acall es la versión asíncrona de invoke/run
-            await agent_executor.acall({"input": question})
-        except Exception as e:
-            print(f"Error en la ejecución del agente: {e}")
-            await queue.put(None)
-
-    asyncio.create_task(run_agent_in_background())
-
-    # Consumimos de la cola y devolvemos los tokens al endpoint de FastAPI
-    while True:
-        token = await queue.get()
-        if token is None:
-            # Se recibió la señal de fin
-            break
-        yield token
+    # El método .astream() es un generador asíncrono que devuelve
+    # los pasos del pensamiento del agente en tiempo real.
+    async for chunk in agent_executor.astream({"input": question}):
+        # El agente devuelve diferentes tipos de "chunks" (pasos de acción, observaciones, etc.)
+        # A nosotros solo nos interesa el chunk final que contiene la respuesta del LLM.
+        # Este chunk se identifica porque tiene la clave "output".
+        if "output" in chunk:
+            # Hacemos yield de cada trozo de la respuesta final a medida que llega.
+            yield chunk["output"]
