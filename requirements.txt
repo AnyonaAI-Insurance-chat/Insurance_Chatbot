@@ -1,0 +1,28 @@
+
+# --- Backend y Web ---
+fastapi
+uvicorn[standard]
+python-dotenv
+jinja2
+boto3
+pypdf
+
+# --- IA y LangChain ---
+langchain
+langchain-community
+langchain-core
+langchain-ollama
+langchain-google-genai
+
+# --- Base de Datos Vectorial ---
+chromadb-client
+
+# --- LLM Local ---
+ollama
+
+# --- Herramientas (Tools) ---
+duckduckgo-search
+
+# --- ¡NUEVAS DEPENDENCIAS PARA EMBEDDINGS! ---
+onnxruntime
+sentence-transformers

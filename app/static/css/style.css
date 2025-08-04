@@ -1,0 +1,290 @@
+/* static/css/style.css - VERSIÓN FINAL Y LIMPIA */
+
+:root {
+    --bordo-oscuro: #5D1B28;
+    --bordo-claro: #8C2D3A;
+    --fondo: #121212;
+    --texto-principal: #000000;
+    --texto-secundario: #B3B3B3;
+    --superficie: #1E1E1E;
+    --borde: #2c2c2c;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(61, 124, 197);
+    color: var(--texto-principal);
+    margin: 0; /* Quitamos el margen para que el header y la imagen ocupen todo */
+    padding: 0;
+}
+
+/* === SECCIÓN HEADER Y LAYOUT PRINCIPAL === */
+
+header {
+    background-color: #2f2f87;
+    padding: 1.5rem; /* Un poco menos de padding */
+    text-align: center;
+    position: relative; /* Para el z-index */
+    z-index: 10;
+}
+
+header h1 {
+    color: white;
+    font-size: 1.8rem;
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.main-image-container {
+    position: absolute; /* Usamos absoluto para que esté detrás */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.main-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* ==================================================================== */
+/* === SECCIÓN DEL CHAT - VERSIÓN FINAL CORREGIDA Y PULIDA === */
+/* ==================================================================== */
+
+/* --- El Botón Flotante (FAB) --- */
+.chat-fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* ¡CORRECCIÓN #1: VOLVEMOS A TU GRADIENTE ORIGINAL COMO FONDO! */
+    /* Este es el fondo que NUNCA debe cambiar. */
+    background: linear-gradient(to left, #5633B0, #3BCFAD);
+    
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* El truco del borde con gradiente y resplandor */
+.chat-fab::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    margin: -3px; /* Controla el grosor del borde */
+    border-radius: inherit;
+    background: linear-gradient(to left, #5633B0, #3BCFAD);
+    /* La animación del resplandor */
+    transition: all 0.3s ease;
+    opacity: 0; /* Oculto por defecto */
+}
+
+/* El resplandor aparece en el hover */
+.chat-fab:hover {
+    transform: scale(1.1);
+    
+    /* ¡CORRECCIÓN #2: El resplandor de borde blanco/gris que querías! */
+    /* Es una sombra expandida, fina y semi-transparente. */
+    box-shadow: 0 0 0 3px rgba(220, 220, 220, 0.9), 0 6px 18px rgba(0,0,0,0.4);
+}
+
+/* Contenedores de los iconos (aseguran que los SVG se centren) */
+#fab-icon-open, #fab-icon-close {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Transición suave para el cambio de icono */
+    transition: opacity 0.3s ease;
+}
+
+/* --- La Ventana del Chat --- */
+.chat-window {
+    position: fixed;
+    bottom: 110px;
+    right: 30px;
+    width: 370px;
+    max-width: 90vw;
+    height: 500px;
+    background-color: white;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 4px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to left, #5633B0, #3BCFAD);
+    border-radius: 15px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* ============================================================ */
+/* === LÓGICA DE ESTADOS (BASADA EN LA CLASE DEL BODY) === */
+/* ============================================================ */
+
+/* --- Estado por Defecto (Chat Cerrado) --- */
+
+/* La cruz está completamente oculta */
+#fab-icon-close {
+    display: none;
+    opacity: 0;
+}
+
+
+/* --- Estado Abierto (Cuando body tiene la clase 'chat-is-open') --- */
+
+.chat-is-open .chat-window {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.chat-is-open .chat-fab {
+    width: 52px;  /* Se hace más pequeño */
+    height: 52px;
+}
+
+.chat-is-open #fab-icon-open {
+    display: none; /* Ocultamos el icono de chat */
+}
+
+.chat-is-open #fab-icon-close {
+    display: flex; /* Mostramos el DIV de la cruz */
+    opacity: 1;    /* Lo hacemos visible */
+}
+
+/* Estilo final para el SVG de la "X" para que sea grande y blanco */
+.chat-is-open #fab-icon-close svg {
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+
+/* === ESTILOS INTERNOS DEL CHAT (Mensajes, Input, etc.) === */
+
+.chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 80%;
+    line-height: 1.4;
+}
+
+.bot-message {
+    background-color: #C2B4E5; /* Un lila más suave */
+    color: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.user-message {
+    background-color: #C2F2EE;
+    color: #1a5c56; /* Un color oscuro del gradiente */
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+    font-weight: 500;
+}
+
+.chat-input-area {
+    padding: 10px;
+    border-top: 1px solid #eee;
+    background-color: #f9f9f9;
+}
+
+#chat-form {
+    display: flex;
+    width: 100%;
+}
+
+#chat-form input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: black;
+    font-size: 1rem;
+    outline: none;
+}
+
+#chat-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+#chat-form button svg {
+    width: 24px;
+    height: 24px;
+    color: #5633B0;
+}
+
+/* Indicador de escribiendo (se mantiene igual) */
+#typing-indicator { display: none; }
+.htmx-request #typing-indicator { display: block; }
+.typing-dot { ... }
+@keyframes typing-blink { ... }
+
+* --- ESTILOS FINALES PARA LOS ICONOS DEL BOTÓN FLOTANTE --- */
+
+/* Contenedor común para ambos iconos, asegura el centrado perfecto */
+#fab-icon-open, #fab-icon-close {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilo para el SVG de la "X" específicamente */
+#fab-icon-close svg {
+    color: white;       /* ¡Hacemos que el color de la "X" sea blanco! */
+    width: 28px;        /* Aumentamos su tamaño para que sea más visible */
+    height: 28px;
+}
+
+/* Ocultar el icono de cerrar por defecto */
+#fab-icon-close {
+    display: none;
+}
+
+/* CUANDO el body tiene la clase 'chat-is-open': */
+
+.chat-is-open #fab-icon-open {
+    display: none; /* Ocultamos el icono de chat (bombilla) */
+}
+
+.chat-is-open #fab-icon-close {
+    display: block; /* Mostramos el icono de la cruz */
+}
