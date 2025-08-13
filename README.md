@@ -1,11 +1,9 @@
-# 🤖 Insurance Policy Chatbot
-
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100.0-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.111.0-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![LangChain](https://img.shields.io/badge/LangChain-0.2-8A2BE2.svg?style=flat)](https://www.langchain.com/)
 [![Docker](https://img.shields.io/badge/Docker-24.0-2496ED.svg?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
 
-An intelligent RAG-based chatbot designed to answer complex questions about insurance policies. This system leverages local Large Language Models with Ollama, a vector database for efficient document retrieval, and a modern web interface built with FastAPI and HTMX.
+An intelligent RAG-based chatbot designed to answer complex questions about insurance policies. This system leverages Google Gemini's powerful API, a vector database for efficient document retrieval, and a modern web interface built with FastAPI and HTMX.
 
 ---
 
@@ -15,7 +13,7 @@ An intelligent RAG-based chatbot designed to answer complex questions about insu
 -   **RAG Pipeline:** Utilizes a Retrieval-Augmented Generation (RAG) pipeline to provide answers based on a private knowledge base of PDF documents, ensuring accuracy and relevance.
 -   **Real-time Streaming:** Answers are streamed token-by-token, creating a dynamic "typing" effect similar to modern AI assistants.
 -   **Web Search Capability:** The agent can access the internet via DuckDuckGo to answer questions about recent news or topics not covered in the local documents.
--   **Local & Free:** Runs entirely on local infrastructure using Ollama and open-source models, making it cost-effective and private.
+-   **High-Performance AI:** Powered by Google Gemini for state-of-the-art response quality and speed.
 -   **Dockerized Environment:** The entire application stack is containerized with Docker for easy setup, consistency, and portability.
 
 ---
@@ -29,8 +27,8 @@ This project is built as a unified web application, prioritizing simplicity and 
 | **Web Framework**      | 🚀 FastAPI                               | Serves the API and the web interface.                                            |
 | **Frontend**           | 🌐 HTML/CSS + HTMX                       | Creates a dynamic, single-page feel without complex JavaScript frameworks.       |
 | **AI Orchestrator**    | 🧠 LangChain                             | Builds the intelligent agent, defines the logic flow, and manages tools.         |
-| **LLM Server**         | 🦙 Ollama                                | Hosts and serves the local Large Language Model via an API.                      |
-| **Language Model (LLM)**| 🧠 Llama 3 (8B)                          | The core neural network that understands and generates text.                     |
+| **LLM Backend**        | ✨ Google Gemini API                     | Provides the core language understanding and generation capabilities.            |
+| **Language Model (LLM)**| 🧠 Gemini 1.5 Flash                      | The state-of-the-art neural network that understands and generates text.         |
 | **Vector Database**    | 🗄️ ChromaDB                              | Stores and retrieves document embeddings for the Retrieval-Augmented Generation. |
 | **Containerization**   | 🐳 Docker & Docker Compose               | Manages the application services and ensures a consistent environment.           |
 
@@ -41,15 +39,15 @@ The system is composed of two main flows: an offline Data Ingestion flow and a r
 ```mermaid
 graph TD
     %% === Style & Class Definitions ===
-    classDef user fill:#007BFF,stroke:#fff,color:#fff
-    classDef process fill:#FFC107,stroke:#333,color:#000
-    classDef web fill:#28A745,stroke:#fff,color:#fff
-    classDef logic fill:#6F42C1,stroke:#fff,color:#fff
-    classDef tool fill:#17A2B8,stroke:#fff,color:#fff
-    classDef db fill:#343A40,stroke:#fff,color:#fff
-    classDef llm fill:#E83E8C,stroke:#fff,color:#fff
-    classDef offline fill:#DC3545,stroke:#fff,color:#fff
-    classDef offline_step fill:#FD7E14,stroke:#fff,color:#fff
+    classDef user fill:#84a98c,stroke:#333,color:#fff
+    classDef process fill:#cad2c5,stroke:#333
+    classDef web fill:#52796f,stroke:#333,color:#fff
+    classDef logic fill:#a5a58d,stroke:#333
+    classDef tool fill:#b7b7a4,stroke:#333
+    classDef db fill:#6b705c,stroke:#333,color:#fff
+    classDef llm fill:#4a4e69,stroke:#333,color:#fff
+    classDef offline fill:#b5838d,stroke:#333,color:#fff
+    classDef offline_step fill:#e5989b,stroke:#333
 
     %% === User Subgraph ===
     subgraph " "
@@ -76,7 +74,7 @@ graph TD
         %% --- Supporting Services ---
         subgraph " "
             CDB[(🗄️ ChromaDB)]:::db
-            LLM[(🧠 LLM - Ollama)]:::llm
+            LLM[(🧠 LLM Backend <br> Google Gemini)]:::llm
         end
         
         %% --- Live Query Flow Connections ---
@@ -117,9 +115,7 @@ Follow these steps to get the project running on your local machine.
 
 -   **Git:** To clone the repository.
 -   **Docker & Docker Compose:** Ensure Docker is installed and the service is running.
--   **Ollama:** To run the language model locally.
-    1.  [Install Ollama](https://ollama.com/).
-    2.  Pull the required model by opening a terminal and running: `ollama pull llama3.2:latest`
+-   **Google AI API Key:** You will need a valid API key for Google Gemini. You can get one from [Google AI Studio](https://aistudio.google.com/).
 
 ### 1. Clone the Repository
 
@@ -135,7 +131,9 @@ Create your environment configuration file by copying the example.
 ```bash
 cp .env.example .env
 ```
-Now, open the `.env` file and fill in your `AWS_...` credentials to allow the download of the dataset.
+Now, open the `.env` file and fill in your credentials:
+-   `AWS_...` credentials for the dataset download.
+-   `GOOGLE_API_KEY` with the key you obtained from Google AI Studio.
 
 ### 3. Build and Run the Application
 
@@ -144,7 +142,7 @@ This command will build the Docker image and start all the necessary services.
 ```bash
 docker-compose up --build
 ```
-> **Patience!** The first build can take a very long time (15-45 minutes) as it needs to download and install large machine learning libraries like PyTorch. Subsequent builds will be much faster.
+> **Patience!** The first build can take a very long time (15-45 minutes) as it needs to download and install large machine learning libraries. Subsequent builds will be much faster.
 
 🛑 **IMPORTANT: Expect a `NotFoundError` on the first run!** This is normal. The application will fail to start because the database is empty. Proceed to the next step.
 
