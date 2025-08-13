@@ -11,14 +11,11 @@ pypdf
 langchain
 langchain-community
 langchain-core
-langchain-ollama
 langchain-google-genai
 
 # --- Base de Datos Vectorial ---
 chromadb-client
 
-# --- LLM Local ---
-ollama
 
 # --- Herramientas (Tools) ---
 duckduckgo-search
