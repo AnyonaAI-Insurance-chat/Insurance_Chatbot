@@ -6,18 +6,18 @@ python-dotenv
 jinja2
 boto3
 pypdf
+ddgs
 
 # --- IA y LangChain ---
 langchain
 langchain-community
 langchain-core
-langchain-ollama
+
+langchain-google-genai
 
 # --- Base de Datos Vectorial ---
 chromadb-client
 
-# --- LLM Local ---
-ollama
 
 # --- Herramientas (Tools) ---
 duckduckgo-search
@@ -25,3 +25,9 @@ duckduckgo-search
 # --- ¡NUEVAS DEPENDENCIAS PARA EMBEDDINGS! ---
 onnxruntime
 sentence-transformers
+
+# --- LOGUIN
+sqlalchemy
+passlib[bcrypt] # Para hashear contraseñas de forma segura
+python-jose[cryptography] 
+bcrypt==3.2.0 

@@ -14,6 +14,7 @@ services:
       - ./app:/code/app
       - ./scripts:/code/scripts
       - ./data:/code/data
+      - ./db:/code/db
     depends_on:
       chromadb:
         # El backend no arrancará hasta que ChromaDB esté listo y saludable

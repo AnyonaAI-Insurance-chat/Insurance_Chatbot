@@ -41,15 +41,15 @@ The system is composed of two main flows: an offline Data Ingestion flow and a r
 ```mermaid
 graph TD
     %% === Style & Class Definitions ===
-    classDef user fill:#84a98c,stroke:#333,color:#fff
-    classDef process fill:#cad2c5,stroke:#333
-    classDef web fill:#52796f,stroke:#333,color:#fff
-    classDef logic fill:#a5a58d,stroke:#333
-    classDef tool fill:#b7b7a4,stroke:#333
-    classDef db fill:#6b705c,stroke:#333,color:#fff
-    classDef llm fill:#4a4e69,stroke:#333,color:#fff
-    classDef offline fill:#b5838d,stroke:#333,color:#fff
-    classDef offline_step fill:#e5989b,stroke:#333
+    classDef user fill:#007BFF,stroke:#fff,color:#fff
+    classDef process fill:#FFC107,stroke:#333,color:#000
+    classDef web fill:#28A745,stroke:#fff,color:#fff
+    classDef logic fill:#6F42C1,stroke:#fff,color:#fff
+    classDef tool fill:#17A2B8,stroke:#fff,color:#fff
+    classDef db fill:#343A40,stroke:#fff,color:#fff
+    classDef llm fill:#E83E8C,stroke:#fff,color:#fff
+    classDef offline fill:#DC3545,stroke:#fff,color:#fff
+    classDef offline_step fill:#FD7E14,stroke:#fff,color:#fff
 
     %% === User Subgraph ===
     subgraph " "
@@ -68,7 +68,7 @@ graph TD
         %% --- Backend ---
         subgraph "Backend (API)"
             API[🚀 FastAPI <br> app/main.py]:::web
-            LOGIC[🧠 Agent Logic <br> app/chatbot_logic.py]:::logic
+            LOGIC[🧠 Agent Logic <br> LangChain <br> app/chatbot_logic.py]:::logic
             TOOL_RAG[🛠️ RAG Tool]:::tool
             TOOL_WEB[🌐 Web Tool]:::tool
         end
