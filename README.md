@@ -15,7 +15,7 @@ An intelligent RAG-based chatbot designed to answer complex questions about insu
 -   **RAG Pipeline:** Utilizes a Retrieval-Augmented Generation (RAG) pipeline to provide answers based on a private knowledge base of PDF documents, ensuring accuracy and relevance.
 -   **Real-time Streaming:** Answers are streamed token-by-token, creating a dynamic "typing" effect similar to modern AI assistants.
 -   **Web Search Capability:** The agent can access the internet via DuckDuckGo to answer questions about recent news or topics not covered in the local documents.
--   **Local & Free:** Runs entirely on local infrastructure using Ollama and open-source models, making it cost-effective and private.
+-   **High-Performance AI:** Powered by Google Gemini for state-of-the-art response quality and speed.
 -   **Dockerized Environment:** The entire application stack is containerized with Docker for easy setup, consistency, and portability.
 
 ---
@@ -24,15 +24,18 @@ An intelligent RAG-based chatbot designed to answer complex questions about insu
 
 This project is built as a unified web application, prioritizing simplicity and development speed without sacrificing a modern user experience.
 
+    
 | Component              | Technology                               | Purpose                                                                          |
 | ---------------------- | ---------------------------------------- | -------------------------------------------------------------------------------- |
 | **Web Framework**      | 🚀 FastAPI                               | Serves the API and the web interface.                                            |
 | **Frontend**           | 🌐 HTML/CSS + HTMX                       | Creates a dynamic, single-page feel without complex JavaScript frameworks.       |
 | **AI Orchestrator**    | 🧠 LangChain                             | Builds the intelligent agent, defines the logic flow, and manages tools.         |
-| **LLM Server**         | 🦙 Ollama                                | Hosts and serves the local Large Language Model via an API.                      |
-| **Language Model (LLM)**| 🧠 Llama 3 (8B)                          | The core neural network that understands and generates text.                     |
+| **LLM Backend**        | ✨ Google Gemini API                     | Provides the core language understanding and generation capabilities.            |
+| **Language Model (LLM)**| 🧠 Gemini 1.5 Flash                      | The state-of-the-art neural network that understands and generates text.         |
 | **Vector Database**    | 🗄️ ChromaDB                              | Stores and retrieves document embeddings for the Retrieval-Augmented Generation. |
 | **Containerization**   | 🐳 Docker & Docker Compose               | Manages the application services and ensures a consistent environment.           |
+
+  
 
 ### Architecture Diagram
 
@@ -76,7 +79,7 @@ graph TD
         %% --- Supporting Services ---
         subgraph " "
             CDB[(🗄️ ChromaDB)]:::db
-            LLM[(🧠 LLM - Ollama)]:::llm
+            LLM[(🧠 LLM Backend <br> Google Gemini)]:::llm
         end
         
         %% --- Live Query Flow Connections ---
@@ -117,9 +120,7 @@ Follow these steps to get the project running on your local machine.
 
 -   **Git:** To clone the repository.
 -   **Docker & Docker Compose:** Ensure Docker is installed and the service is running.
--   **Ollama:** To run the language model locally.
-    1.  [Install Ollama](https://ollama.com/).
-    2.  Pull the required model by opening a terminal and running: `ollama pull llama3.2:latest`
+-   **Google AI API Key:** You will need a valid API key for Google Gemini. You can get one from [Google AI Studio](https://aistudio.google.com/).
 
 ### 1. Clone the Repository
 
@@ -135,7 +136,11 @@ Create your environment configuration file by copying the example.
 ```bash
 cp .env.example .env
 ```
-Now, open the `.env` file and fill in your `AWS_...` credentials to allow the download of the dataset.
+Now, open the .env file and fill in your credentials:
+
+    AWS_... credentials for the dataset download.
+
+    GOOGLE_API_KEY with the key you obtained from Google AI Studio.
 
 ### 3. Build and Run the Application
 
