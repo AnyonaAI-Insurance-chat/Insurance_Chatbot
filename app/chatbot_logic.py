@@ -1,6 +1,3 @@
-# app/chatbot_logic.py
-# Fiel adaptación del trabajo del equipo de IA para funcionar con FastAPI
-
 import os
 import asyncio
 from typing import AsyncGenerator
@@ -203,6 +200,17 @@ def crear_agente_executor(tools, llm):
 collection = cargar_chromadb()
 
 
+
+
+# 2. Crear las herramientas
+tool_chromadb = crear_tool_chromadb(collection)
+tool_web = crear_tool_web()
+tools = [tool_chromadb, tool_web]
+
+# 3. Configurar el LLM
+# Usamos una variable de entorno para la URL de Ollama, con un valor por defecto
+# para que Docker pueda comunicarse con el Ollama que corre en el host (tu PC).
+
 google_api_key = os.getenv("GOOGLE_API_KEY") 
 if not google_api_key:
     raise ValueError("La variable de entorno GOOGLE_API_KEY no está configurada.")
@@ -210,7 +218,12 @@ if not google_api_key:
 llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-flash-latest", # O el modelo de Gemini que prefieras
     google_api_key=google_api_key,
+
     temperature=0.0,
+
+    temperature=0.1,
+    convert_system_message_to_human=True # Útil para compatibilidad con algunos agentes
+
 )
 
 
@@ -230,6 +243,7 @@ tools = [
 
 async def get_agent_response(question: str, session_id: str) -> AsyncGenerator[str, None]:
     """
+
     Función puente que ahora usa el `AgentExecutor` con el agente `Tool Calling`.
     """
     # Creamos una instancia fresca del ejecutor para cada petición para mantener el estado aislado.
@@ -241,3 +255,22 @@ async def get_agent_response(question: str, session_id: str) -> AsyncGenerator[s
             cleaned_output = chunk["output"].replace("```", "").strip()
             if cleaned_output:
                 yield cleaned_output
+
+    Función "puente" que usa las funciones del equipo de IA para responder
+    a una petición web de forma asíncrona y con streaming, usando el método nativo
+    de LangChain `.astream()`.
+    """
+    # Creamos una instancia fresca del agente para cada petición.
+    # Ya no necesitamos pasarle el callback.
+    agent_executor = crear_agente(tools, llm)
+
+    # El método .astream() es un generador asíncrono que devuelve
+    # los pasos del pensamiento del agente en tiempo real.
+    async for chunk in agent_executor.astream({"input": question}):
+        # El agente devuelve diferentes tipos de "chunks" (pasos de acción, observaciones, etc.)
+        # A nosotros solo nos interesa el chunk final que contiene la respuesta del LLM.
+        # Este chunk se identifica porque tiene la clave "output".
+        if "output" in chunk:
+            # Hacemos yield de cada trozo de la respuesta final a medida que llega.
+            yield chunk["output"]
+

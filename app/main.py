@@ -8,18 +8,25 @@ from typing import Optional
 from datetime import timedelta
 import html
 
+
 # --- Importaciones locales (ahora correctas) ---
 from .db import models, crud
 from .db.database import SessionLocal, engine
 from .security import verify_password, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
+
+
 from .chatbot_logic import get_agent_response
 
 # --- Inicialización ---
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Insurance Chatbot API")
 
+
 # --- Montaje de Archivos Estáticos y Plantillas ---
 # IMPORTANTE: Esto se mueve a una sección propia después de inicializar la app.
+
+# Servir el frontend 
+
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
