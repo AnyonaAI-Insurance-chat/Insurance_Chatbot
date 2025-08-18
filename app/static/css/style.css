@@ -252,7 +252,11 @@ header h1 {
 
 /* Indicador de escribiendo (se mantiene igual) */
 #typing-indicator { display: none; }
-.htmx-request #typing-indicator { display: block; }
+.htmx-request #typing-indicator {
+    display: flex; /* Usamos flex para que los puntos se alineen */
+    align-items: center;
+    gap: 4px;
+}
 .typing-dot { ... }
 @keyframes typing-blink { ... }
 

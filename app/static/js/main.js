@@ -1,41 +1,44 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    // --- LÓGICA DEL FORMULARIO (Esta parte ya funciona bien) ---
+    // --- LÓGICA DEL FORMULARIO DE CHAT ---
     const chatForm = document.getElementById('chat-form');
-    if (chatForm) {
+    const messageInput = document.getElementById('message-input');
+    const messagesContainer = document.getElementById('chat-messages');
+    
+    if (chatForm && messageInput && messagesContainer) {
+        
+        // Escuchamos el evento 'submit' del formulario
         chatForm.addEventListener('submit', function(event) {
-            const messageInput = document.getElementById('message-input');
-            const messagesContainer = document.getElementById('chat-messages');
+            const userMessage = messageInput.value.trim();
 
-            if (messageInput && messagesContainer) {
-                const userMessage = messageInput.value.trim();
-                if (userMessage) {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = 'message user-message';
-                    messageDiv.textContent = userMessage;
-                    messagesContainer.appendChild(messageDiv);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }
+            if (userMessage) {
+                // 1. Muestra el mensaje del usuario inmediatamente
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user-message';
+                messageDiv.textContent = userMessage;
+                messagesContainer.appendChild(messageDiv);
+                
+                // 2. Limpia el campo de texto INMEDIATAMENTE
+                messageInput.value = '';
+
+                // 3. Hace scroll para ver el nuevo mensaje
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
         });
     }
 
-    // --- LÓGICA DEL CHAT Y BOTÓN FLOTANTE (¡LA VERSIÓN CORREGIDA!) ---
+    // --- LÓGICA DEL BOTÓN FLOTANTE (FAB) ---
     const chatFab = document.getElementById('chat-fab');
     const chatWindow = document.getElementById('chat-window');
 
     if (chatFab && chatWindow) {
         chatFab.addEventListener('click', () => {
-            // Simplemente añadimos o quitamos la clase 'is-open' del BODY.
-            // El CSS se encargará de toda la lógica de mostrar/ocultar y animar.
+            // Alterna la clase 'chat-is-open' en el body
             document.body.classList.toggle('chat-is-open');
 
-            // Enfocar el input cuando se abre el chat
+            // Enfoca el input si se abre la ventana
             if (document.body.classList.contains('chat-is-open')) {
-                const messageInput = document.getElementById('message-input');
-                if (messageInput) {
-                    messageInput.focus();
-                }
+                messageInput.focus();
             }
         });
     }

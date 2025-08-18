@@ -1,0 +1,52 @@
+    
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>Registro - Insurance Chatbot</title>
+    <link rel="stylesheet" href="/static/css/auth_style.css">
+</head>
+<body class="auth-page">
+
+    <div class="auth-container">
+        <!-- Puedes usar el mismo logo que en tu chat o uno específico -->
+        <div class="auth-logo">
+             <img src="/static/imagenes/logo.png" alt="Logo" class="auth-logo">
+        </div>
+
+        <h2 class="auth-title">Crear una Cuenta</h2>
+
+        <!-- Contenedor donde HTMX pondrá los mensajes de éxito o error -->
+        <div id="response-message"></div>
+
+        <form class="auth-form"
+              hx-post="/register"
+              hx-target="#response-message"
+              hx-swap="innerHTML"
+              hx-ext="json-enc">
+
+            <div class="mb-3" style="margin-bottom: 1rem;">
+                <label for="username" class="form-label">Nombre de Usuario</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-4" style="margin-bottom: 1rem;">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrarse</button>
+        </form>
+
+        <div class="auth-link">
+            ¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a>
+        </div>
+    </div>
+
+    <!-- Script de HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+
+</body>
+</html>
+
+  

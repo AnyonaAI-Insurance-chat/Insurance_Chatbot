@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+:root {
+    --gradient-start: #5633B0;
+    --gradient-end: #3BCFAD;
+    --bg-color: #0d1117; /* Un fondo oscuro tipo GitHub */
+    --form-bg-color: rgba(22, 27, 34, 0.9);
+    --text-color-primary: #c9d1d9;
+    --text-color-secondary: #8b949e;
+    --border-color: rgba(139, 148, 158, 0.3);
+    --accent-color: #58a6ff;
+}
+
+body.auth-page {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    color: var(--text-color-primary);
+}
+
+.auth-container {
+    max-width: 420px;
+    width: 100%;
+    padding: 35px;
+    background-color: var(--form-bg-color);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+.welcome-subtitle {
+    font-size: 1.1rem;
+    font-weight: 300; /* Usamos un peso ligero para un look "light" */
+    color: var(--text-color-secondary); /* Un color sutil, no tan brillante */
+    text-transform: uppercase;
+    letter-spacing: 0.2rem; /* Espaciado entre letras para un toque de diseño */
+    margin-bottom: 0.5rem; /* Pequeño espacio antes del logo */
+    padding: 0;
+}
+
+
+.auth-logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1.5rem;
+    padding: 5px;
+    border-radius: 50%;
+    background: linear-gradient(to left, var(--gradient-start), var(--gradient-end));
+}
+
+.auth-title {
+     color: var(--text-color-primary);
+     margin-bottom: 1.3rem;
+     font-weight: 400; /* CAMBIO: De 600 a 400 para un look más limpio */
+     font-size: 1.7rem; /* CAMBIO: Ajustamos el tamaño ligeramente */
+     letter-spacing: 0.05rem; /* CAMBIO: Añadimos un sutil espaciado */
+}
+
+
+.auth-form .form-control {
+     background-color: var(--bg-color);
+     color: var(--text-color-primary);
+     border: 1px solid var(--border-color);
+     padding: 0.85rem 1rem; 
+     border-radius: 8px;  
+     text-align: center;    
+     font-size: 1rem;
+     width: 100%;
+}
+.auth-form .form-control::placeholder {
+    color: var(--text-color-secondary);
+    opacity: 0.7; /* Hacemos el placeholder un poco más sutil */
+}
+.auth-form .form-control:focus {
+    background-color: var(--bg-color);
+    color: var(--text-color-primary);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.25);
+}
+
+.auth-form .btn-primary {
+     width: 100%;
+     padding: 0.75rem;
+     margin-top: 1.5rem;
+     font-size: 1rem;
+     font-weight: 600;
+     background: linear-gradient(to left, var(--gradient-start), var(--gradient-end));
+     border: none;
+     border-radius: 6px;
+     color: white;
+}
+
+.auth-link {
+    display: block;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-color-secondary);
+}
+
+.auth-link a {
+    color: var(--accent-color);
+    font-weight: 500;
+    text-decoration: none;
+}
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos para los mensajes de respuesta (usados por HTMX) */
+#response-message {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    font-size: 0.9rem;
+    text-align: left;
+    min-height: 50px; /* Espacio reservado para que no salte el layout */
+}
+#response-message li {
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+}
+#response-message .success {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #3fb950;
+    border-color: rgba(40, 167, 69, 0.4);
+}
+#response-message .error {
+    background-color: rgba(220, 53, 69, 0.15);
+    color: #f85149;
+    border-color: rgba(220, 53, 69, 0.4);
+}
+

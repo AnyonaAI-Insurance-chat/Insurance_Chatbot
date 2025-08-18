@@ -1,0 +1,48 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Insurance Chatbot</title>
+    <link rel="stylesheet" href="/static/css/auth_style.css">
+</head>
+<body class="auth-page">
+
+    <div class="auth-container">
+        <h1 class="welcome-subtitle">Insurance Chatbot</h1>
+
+        <!-- ¡CORRECCIÓN! Usamos el logo.png que pediste -->
+        <img src="/static/imagenes/logo.png" alt="Logo" class="auth-logo"> 
+        
+        <h2 class="auth-title">Iniciar Sesión</h2>
+
+        <!-- Contenedor para los mensajes de respuesta -->
+        <ul id="response-message"></ul>
+
+        <!-- Formulario con HTMX -->
+        <form class="auth-form"
+              hx-post="/login"
+              hx-target="#response-message"
+              hx-swap="innerHTML"
+              hx-ext="json-enc">
+
+            <div style="margin-bottom: 1rem; width: 100%;">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de Usuario" required>
+            </div>
+            
+            <div style="margin-bottom: 1rem; width: 100%;">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+
+        <div class="auth-link">
+            ¿No tienes cuenta? <a href="/register">Regístrate aquí</a>
+        </div>
+    </div>
+
+    <!-- Scripts de HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+
+</body>
+</html>
